@@ -17,28 +17,26 @@ class Graph():
 
 
 
-    def build_graph():
-        global n, m, q, degree, graph, adj, agglomeration_coefficient ,nodes
+    def build_graph(self):
 
-        n, m, q = map(int, input().split())
+        self.n, self.m, self.q = map(int, input().split())
 
-        degree = [0] * (n+1)
-        agglomeration_coefficient = [0] * (n+1)
-        adj = [list() for _ in range(n+1)]  
-        matrix = [[False] * (n+1) for _ in range(n+1)]
-        nodes = [i for  i in range(1, n+1)]
+        self.degree = [0] * (self.n+1)
+        self.agglomeration_coefficient = [0] * (self.n+1)
+        self.adj = [list() for _ in range(self.n+1)]  
+        self.nodes = [i for  i in range(1, self.n+1)]
 
-        for i in nodes: graph.add_node(i)
+        for i in self.nodes: self.graph.add_node(i)
 
-        for _ in range(q):
+        for _ in range(self.q):
             u, v = map(int, input().split())
-            graph.add_edge(u, v)
+            self.graph.add_edge(u, v)
 
-            adj[u].append(v)
-            adj[v].append(u)
+            self.adj[u].append(v)
+            self.adj[v].append(u)
 
-            degree[u] += 1
-            degree[v] += 1
+            self.degree[u] += 1
+            self.degree[v] += 1
 
     total_colors = [
         "red",
