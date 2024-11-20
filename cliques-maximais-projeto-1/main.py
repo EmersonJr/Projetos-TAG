@@ -6,7 +6,7 @@ class Graph():
 
     def __init__(self) -> None:
         self.graph = nx.Graph()
-        self.adj= list(list())
+        self.adj= list(set())
         self.degree = list()
         self.cliques = list()
         self.agglomeration_coefficient = list()
@@ -14,8 +14,7 @@ class Graph():
         self.n = None
         self.m = None
         self.q = None
-
-
+        self.agglo_coeff_graph = 0
 
     def build_graph(self):
 
@@ -23,7 +22,7 @@ class Graph():
 
         self.degree = [0] * (self.n+1)
         self.agglomeration_coefficient = [0] * (self.n+1)
-        self.adj = [list() for _ in range(self.n+1)]  
+        self.adj = [set() for _ in range(self.n+1)]  
         self.nodes = [i for  i in range(1, self.n+1)]
 
         for i in self.nodes: self.graph.add_node(i)
@@ -32,51 +31,71 @@ class Graph():
             u, v = map(int, input().split())
             self.graph.add_edge(u, v)
 
-            self.adj[u].append(v)
-            self.adj[v].append(u)
+            self.adj[u].add(v)
+            self.adj[v].add(u)
 
             self.degree[u] += 1
             self.degree[v] += 1
+            
+    def bronKerbosch(self, p : set, x : set, r : set):
 
-    total_colors = [
-        "red",
-        "blue",
-        "green",
-        "yellow",
-        "purple",
-        "orange",
-        "pink",
-        "brown",
-        "gray",
-        "violet",
-        "lightblue",
-        "cyan",
-        "magenta",
-        "teal",
-        "maroon", 
-        "gold",
-    ]
-
-    colors = [None] * (n+1)
-
-
-    for click in cliques:
-        flag = True
-        if(len(total_colors) == 0): break
+        if len(p) == 0 and len(x) == 0:
+            self.cliques.append(r)
+            return
         
-        for node in click:
-            if(colors[node]): flag = False
+        for v in p:
 
-        if(not flag): continue
-        color = choice(total_colors)
-        for node in click:
-            colors[node] = color
-        total_colors.remove(color)
+            p_v = p.intersection(self.adj[v])
+            x_v = x.intersection(self.adj[v])
+            r_v = r.union(set(v))
 
-    colors = [i if i is not None else 'white' for i in colors]
+            self.bronKerbosch(p_v, x_v, r_v)
 
+            p.pop(v)
+            x.add(v)
+    
+    def calcAglomeration(self):
 
-    pos = nx.spring_layout(graph, k=1) 
-    nx.draw(graph, pos, with_labels=True, node_color=colors[1:], edge_color='gray', node_size=200, font_size=12)
+        for v in self.nodes:
 
-    plt.show()
+            denom = len(self.adj[v]) *(len(self.adj[v]) - 1) / 2
+            ti = 0
+
+            aux = list(self.adj[v])
+
+            for i in range(len(self.adj[v])):
+                for j in range(i + 1, len(self.adj[v])):
+                    if aux[v][j] in self.adj[aux[v][i]]:
+                        ti += 1
+            
+            self.agglomeration_coefficient[v] = ti / denom
+            self.agglo_coeff_graph += ti / denom
+        
+        self.agglo_coeff_graph /= self.n
+    
+    def __str__(self):
+
+        print("Vértices e grau: ")
+
+        for v in self.nodes:
+            print("Vértice", end=" => ")
+            print(v, end= ". Grau => ")
+            print(self.degree[v])
+        print()
+        print("Cliques Maximais: ")
+
+        for i in range(len(self.cliques)):
+            print(f"Clique {i+1}", end=" => ")
+            for u in self.cliques[i]:
+                print(u, end=" ")
+            print()
+        print()
+        print("Coeficientes de algomeração dos vértices: ")
+
+        for v in self.nodes:
+            print("Vértice", end=" => ")
+            print(v, end= ". coeficiente de aglomeração => ")
+            print(self.agglomeration_coefficient[v])
+        
+        print(f"Coeficiente de aglomeração do grafo: {self.agglo_coeff_graph}")
+        print()
