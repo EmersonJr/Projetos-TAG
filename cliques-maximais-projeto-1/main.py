@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from random import choice
 
 
 class Graph():
@@ -39,40 +40,90 @@ class Graph():
             
     def bronKerbosch(self, p : set, x : set, r : set):
 
-        if len(p) == 0 and len(x) == 0:
-            self.cliques.append(r)
+        if (len(p) == 0 and len(x) == 0):
+            self.cliques.append(list(r))
             return
         
-        for v in p:
-
-            p_v = p.intersection(self.adj[v])
-            x_v = x.intersection(self.adj[v])
-            r_v = r.union(set(v))
-
-            self.bronKerbosch(p_v, x_v, r_v)
-
-            p.pop(v)
+        for v in set(p):
+            r.add(v)
+            self.bronKerbosch(p.intersection(self.adj[v]), x.intersection(self.adj[v]), r)
+            r.remove(v)
+            p.remove(v)
             x.add(v)
+    
+    def find_cliques(self):
+        self.bronKerbosch(set(self.nodes), set(), set())
+
+        self.cliques = sorted(self.cliques, key= len)
+        self.cliques = self.cliques[::-1]
     
     def calcAglomeration(self):
 
         for v in self.nodes:
 
-            denom = len(self.adj[v]) *(len(self.adj[v]) - 1) / 2
+            denom = len(self.adj[v]) * (len(self.adj[v]) - 1) / 2
+            if (denom == 0): 
+                continue
+            
             ti = 0
 
             aux = list(self.adj[v])
 
             for i in range(len(self.adj[v])):
                 for j in range(i + 1, len(self.adj[v])):
-                    if aux[v][j] in self.adj[aux[v][i]]:
+                    if aux[j] in self.adj[aux[i]]:
                         ti += 1
             
             self.agglomeration_coefficient[v] = ti / denom
             self.agglo_coeff_graph += ti / denom
         
         self.agglo_coeff_graph /= self.n
-    
+
+    def draw_graph(self):
+        total_colors = [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "purple",
+            "orange",
+            "pink",
+            "brown",
+            "gray",
+            "violet",
+            "lightblue",
+            "cyan",
+            "magenta",
+            "teal",
+            "maroon", 
+            "gold",
+        ]
+
+        colors = [None] * (self.n + 1)
+        
+        for click in self.cliques:
+            is_none = True 
+            
+            for(v) in click:
+                if(colors[v] != None):
+                    is_none = False
+                    break
+            if(not is_none): continue
+
+            color = choice(total_colors)
+            for (v) in click:
+                colors[v] = color 
+            total_colors.remove(color)
+
+        colors = [color if color is not None else 'white' for color in colors]
+
+
+        pos = nx.spring_layout(self.graph, k=1)
+        nx.draw(self.graph, pos, with_labels=True, node_color=colors[1:], edge_color = "black", node_size = 200, font_size = 12)
+        plt.show()
+
+        
+
     def __str__(self):
 
         print("Vértices e grau: ")
@@ -99,3 +150,17 @@ class Graph():
         
         print(f"Coeficiente de aglomeração do grafo: {self.agglo_coeff_graph}")
         print()
+
+        self.draw_graph()
+
+def solve():
+    graph = Graph()
+
+    graph.build_graph()
+    graph.find_cliques()
+    graph.calcAglomeration()
+    
+    print(graph)
+
+if __name__ == "__main__":
+    solve()
