@@ -261,5 +261,4 @@ Coeficiente de Aglomeração Médio: 0.2589582460550202
 ## Grafo com cliques maximais pintados por cor:
 Cabe uma explicação de como escolhemos pintar os cliques nesta parte. Como muitos vértices pertencem a mais de um clique, decidimos ordenar os cliques decrescentemente pelo tamanho e pintar os cliques tal que todos os ses vétices não fossem pintados por um outro clique previamente, escolhendo cores aleatóriamente. Com isso, obtivemos o seguinte resultado:
 
-
-
+<img alt="graph" src="./cliques_graph.png" />
