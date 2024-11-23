@@ -40,12 +40,29 @@ class Graph():
             
     def bronKerbosch(self, p : set, x : set, r : set):
 
+        '''
+            Algoritmo para encontrar cliques maximais de um grafo:
+                Bron-Kerbosch sem pivô:
+                    . P = candidatos a compor um clique maximal
+                    . X = vertices que não podem contribuir mais para o clique
+                    . R = clique atual
+
+        '''
         if (len(p) == 0 and len(x) == 0):
+
+            ''' 
+                Se P e X estiverem vazios então temos que R é um clique maximal
+
+            '''
             self.cliques.append(list(r))
             return
         
         for v in set(p):
             r.add(v)
+            '''
+                BronKerbsoch(R U {v}, P inter N(v), X inter N(v))
+
+            '''
             self.bronKerbosch(p.intersection(self.adj[v]), x.intersection(self.adj[v]), r)
             r.remove(v)
             p.remove(v)
@@ -59,6 +76,15 @@ class Graph():
     
     def calcAglomeration(self):
 
+        '''
+            Calculamos o coeficiente de aglomeração utilizando a formula
+            aprendida na disciplina, onde se é feito a razão entre as ligações
+            existentes entre os vizinhos e as possiveis ligações entre os vizinhos
+            
+            Para calcular o coeficiente do grafo efetuamos o calculo da media dos coeficientes
+            já calculados para cada nodo
+            
+        '''
         for v in self.nodes:
 
             denom = len(self.adj[v]) * (len(self.adj[v]) - 1) / 2
