@@ -14,11 +14,11 @@ pip install matplotlib networkx
 # Run
 Executar o seguinte comando no terminal:
 ```sheel
-py main.py < in.txt
+py main.py
 ```
 ou 
 ```sheel
-python main.py < in.txt
+python main.py
 ```
 
 

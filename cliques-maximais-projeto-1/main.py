@@ -6,6 +6,7 @@ from random import choice
 class Graph():
 
     def __init__(self) -> None:
+        self.file = 'in.txt'
         self.graph = nx.Graph()
         self.adj= list(set())
         self.degree = list()
@@ -18,27 +19,28 @@ class Graph():
         self.agglo_coeff_graph = 0
 
     def build_graph(self):
+        with open(self.file, 'r') as file:
+            self.n, self.m, self.q = map(int, next(file).split())
 
-        self.n, self.m, self.q = map(int, input().split())
+            self.degree = [0] * (self.n+1)
+            self.agglomeration_coefficient = [0] * (self.n+1)
+            self.adj = [set() for _ in range(self.n+1)]  
+            self.nodes = [i for  i in range(1, self.n+1)]
 
-        self.degree = [0] * (self.n+1)
-        self.agglomeration_coefficient = [0] * (self.n+1)
-        self.adj = [set() for _ in range(self.n+1)]  
-        self.nodes = [i for  i in range(1, self.n+1)]
+            for i in self.nodes: self.graph.add_node(i)
 
-        for i in self.nodes: self.graph.add_node(i)
+            # Aqui montamos a lista de adjacências do grafo
+            for _ in range(self.q):
+                u, v = map(int, next(file).split())
+                self.graph.add_edge(u, v)
 
-        for _ in range(self.q):
-            u, v = map(int, input().split())
-            self.graph.add_edge(u, v)
+                self.adj[u].add(v)
+                self.adj[v].add(u)
 
-            self.adj[u].add(v)
-            self.adj[v].add(u)
-
-            self.degree[u] += 1
-            self.degree[v] += 1
+                self.degree[u] += 1
+                self.degree[v] += 1
             
-    def bronKerbosch(self, p : set, x : set, r : set):
+    def BronKerbosch(self, p : set, x : set, r : set):
 
         '''
             Algoritmo para encontrar cliques maximais de um grafo:
@@ -63,13 +65,13 @@ class Graph():
                 BronKerbsoch(R U {v}, P inter N(v), X inter N(v))
 
             '''
-            self.bronKerbosch(p.intersection(self.adj[v]), x.intersection(self.adj[v]), r)
+            self.BronKerbosch(p.intersection(self.adj[v]), x.intersection(self.adj[v]), r)
             r.remove(v)
             p.remove(v)
             x.add(v)
     
     def find_cliques(self):
-        self.bronKerbosch(set(self.nodes), set(), set())
+        self.BronKerbosch(set(self.nodes), set(), set())
 
         self.cliques = sorted(self.cliques, key= len)
         self.cliques = self.cliques[::-1]
@@ -185,7 +187,7 @@ def solve():
     graph.build_graph()
     graph.find_cliques()
     graph.calcAglomeration()
-    
+
     print(graph)
 
 if __name__ == "__main__":
