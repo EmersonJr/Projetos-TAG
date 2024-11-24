@@ -265,7 +265,15 @@ Coeficiente de Aglomeração Médio: 0.2589582460550202
 
 
 
-## Grafo com cliques maximais pintados por cor:
+## Grafo com cliques maximais pintados por cor
 Cabe uma explicação de como escolhemos pintar os cliques nesta parte. Como muitos vértices pertencem a mais de um clique, decidimos ordenar os cliques decrescentemente pelo tamanho e pintar os cliques tal que todos os seus vétices não fossem pintados por um outro clique previamente, escolhendo cores aleatóriamente. Por fim, os vértices que acabaram não sendo pintados, por conta de não haver um clique maximal tal que ele e todos os outros vértices do clique não tivesse sido pintados anteriormente, foram pintados de branco. Com isso, obtivemos o seguinte resultado:
 
 <img alt="graph" src="./cliques_graph.png" />
+
+
+# Repositório
+<p>Para ver o repositório do projeto, clique no botão a seguir:</p>
+<a href="https://github.com/EmersonJr/Projetos-TAG/tree/main/cliques-maximais-projeto-1" target="_blank" style="text-decoration: none;" target="_blank">
+  <img align="center" alt="html5" src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
+</a>
+
