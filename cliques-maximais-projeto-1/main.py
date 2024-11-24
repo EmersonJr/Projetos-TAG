@@ -199,6 +199,7 @@ class Graph():
             print(v, end= ". coeficiente de aglomeração => ")
             print(self.agglomeration_coefficient[v])
         
+        print()
         print(f"Coeficiente de aglomeração do grafo: {self.agglo_coeff_graph}")
         print()
 
