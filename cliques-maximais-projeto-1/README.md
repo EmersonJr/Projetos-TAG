@@ -1,8 +1,15 @@
 # Trabalho 1 - Clique Maximais e Coeficiente de Aglomeração
 
-### Participantes:
-- Emerson Luiz Cruz Junior - 231003531
-- Lucas Gabriel de Oliveira Lima - 231003406
+<h2>💻 Autores</h2>
+<ul>
+  <li>Emerson Luiz Cruz Junior - 231003531</li>
+  <li>Lucas Gabriel de Oliveira Lima - 231003406</li>
+</ul>
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/EmersonJr" target="_blank"><img style="border-radius: 50%;" src="https://github.com/EmersonJr.png" width="100px;" alt="Emerson Junior"/><br /><sub><b>Emerson Junior</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/lucasdbr05" target="_blank"><img style="border-radius: 50%;" src="https://github.com/lucasdbr05.png" width="100px;" alt="Lucas Lima"/><br /><sub><b>Lucas Lima</b></sub></a><br /></td>
+</table>
 
 
 # Setup
