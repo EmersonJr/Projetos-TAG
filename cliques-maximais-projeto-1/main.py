@@ -108,6 +108,13 @@ class Graph():
         self.agglo_coeff_graph /= self.n
 
     def draw_graph(self):
+
+        '''
+
+            Aqui realizamos a definição das cores que usaremos para
+            pintar a representação do grafo
+
+        '''
         total_colors = [
             "red",
             "blue",
@@ -145,7 +152,16 @@ class Graph():
 
         colors = [color if color is not None else 'white' for color in colors]
 
+        '''
 
+            Para fazer o desenho do grafo usamos duas bibliotecas a
+            NetworkX e a MatPlotLib da NetworkX usamos o método
+            "spring_layout" que realiza a formatação do grafo para o desenho,
+            para realizar um desenho em um grafico do matplotlib usamos o
+            método "draw" e para mostrar na tela usamos o método do matplotlib
+            "show"
+
+        '''
         pos = nx.spring_layout(self.graph, k=1)
         nx.draw(self.graph, pos, with_labels=True, node_color=colors[1:], edge_color = "black", node_size = 200, font_size = 12)
         plt.show()
@@ -154,6 +170,13 @@ class Graph():
 
     def __str__(self):
 
+        '''
+
+            No paradigma que escolhemos a maneira mais convencional
+            para mostrar as coisas do grafo foi a implementação de um
+            metodo
+
+        '''
         print("Vértices e grau: ")
 
         for v in self.nodes:
@@ -179,6 +202,12 @@ class Graph():
         print(f"Coeficiente de aglomeração do grafo: {self.agglo_coeff_graph}")
         print()
 
+        '''
+            
+            Aqui a gente chama a função que realiza
+            o desenho do grafo
+
+        '''
         self.draw_graph()
 
 def solve():
