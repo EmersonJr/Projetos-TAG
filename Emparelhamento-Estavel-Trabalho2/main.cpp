@@ -81,7 +81,7 @@ void take_aluno(string s){
     getline(taking, mid, ')');
 
     aluno_act.nota = mid[0] - '0';
-
+    int notas_menores = 0;
     while(getline(taking1, mid1, ' ')) {
 
         string projeto = "";
@@ -92,13 +92,13 @@ void take_aluno(string s){
             projeto.push_back(mid1[i]);
         }
 
+        aluno_act.projetos_desejados.push_back(projeto);
         if(projetos[projeto].nota_required <= aluno_act.nota){
-
-            aluno_act.projetos_desejados.push_back(projeto);
+            notas_menores++;
         }
     }
 
-    if(aluno_act.projetos_desejados.size()) alunos.push_back(aluno_act);
+    if(notas_menores < aluno_act.projetos_desejados.size()) alunos.push_back(aluno_act);
 }
 
 int parse_int(string s){
@@ -172,6 +172,10 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
         Aluno &real_me = alunos[me];
         Projeto &project_now = projetos[real_me.projetos_desejados[real_me.idx_projetos]];
 
+        if(project_now.nota_required > real_me.nota) {
+            real_me.idx_projetos++;
+            if(real_me.idx_projetos < real_me.projetos_desejados.size()) q.push(me);
+        }
         if(project_now.pares.size() == project_now.can_add) {
 
             auto bad_pairing = project_now.pares.top();
@@ -200,7 +204,7 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
                     real_me.idx_projetos = 0;
                 }
             }
-        } else{
+        } else {
 
             project_now.pares.push({real_me.nota, me});
             ret.insert({project_now.nome, real_me.nome});
