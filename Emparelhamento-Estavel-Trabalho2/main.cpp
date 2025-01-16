@@ -5,6 +5,9 @@
 #include<string>
 #include<sstream>
 #include<fstream>
+#include<algorithm>
+#include<set>
+#include<random>
 
 using namespace std;
 
@@ -36,16 +39,17 @@ struct Aluno {
         return(projetos_desejados.size() == x && nota == y);
     }
 };
+
 struct Projeto {
 
-    priority_queue<Aluno> pares;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pares;
     int nota_required;
     int can_add;
     string nome;
 };
 
 
-vector<vector<Aluno>> alunos(3);
+vector<Aluno> alunos;
 map<string, Projeto> projetos;
 
 void take_aluno(string s){
@@ -94,7 +98,7 @@ void take_aluno(string s){
         }
     }
 
-    alunos[aluno_act.nota - 3].push_back(aluno_act);
+    if(aluno_act.projetos_desejados.size()) alunos.push_back(aluno_act);
 }
 
 int parse_int(string s){
@@ -157,6 +161,55 @@ void take_projeto(string s){
     projetos[projeto_act.nome] = projeto_act;
 }
 
+set<pair<string, string>> gale_shapley(queue<int>& q){
+
+    set<pair<string, string>> ret;
+
+    while(!q.empty()){
+
+        int me = q.front(); q.pop();
+
+        Aluno &real_me = alunos[me];
+        Projeto &project_now = projetos[real_me.projetos_desejados[real_me.idx_projetos]];
+
+        if(project_now.pares.size() == project_now.can_add) {
+
+            auto bad_pairing = project_now.pares.top();
+            if(bad_pairing.first < real_me.nota){
+
+                ret.erase({project_now.nome, alunos[bad_pairing.second].nome});
+                alunos[bad_pairing.second].idx_projetos++;
+                if(alunos[bad_pairing.second].idx_projetos < alunos[bad_pairing.second].projetos_desejados.size()){
+
+                    q.push(me);
+                } else{
+
+                    alunos[bad_pairing.second].idx_projetos = 0;
+                }
+                q.push(bad_pairing.second);
+                project_now.pares.pop();
+                project_now.pares.push({real_me.nota, me});
+                ret.insert({project_now.nome, real_me.nome});
+            } else {
+                real_me.idx_projetos++;
+                if(real_me.idx_projetos < real_me.projetos_desejados.size()){
+
+                    q.push(me);
+                } else{
+
+                    real_me.idx_projetos = 0;
+                }
+            }
+        } else{
+
+            project_now.pares.push({real_me.nota, me});
+            ret.insert({project_now.nome, real_me.nome});
+        }
+    } 
+
+    return ret;
+}
+
 signed main() {
 
     string in, file_in = "in.txt";
@@ -167,22 +220,34 @@ signed main() {
         getline(file, in);
         take_projeto(in);
     }
-
     while(getline(file, in)){
 
         take_aluno(in);
     }
-    
-    for(int i = 0; i < 3; i++){
 
-        for(auto x : alunos[i]){
+    sort(alunos.begin(), alunos.end());
 
-            cout << x.nome << " " << x.nota << '\n';
+    vector<int> perm(alunos.size());
+    for(int i = 0; i < alunos.size(); i++) perm[i] = i;
+
+    int ans = 0;
+
+    for(int i = 0; i < 10; i++){
+        
+        queue<int> q;
+
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(perm.begin(), perm.end(), g);
+        for(auto&[x, y] : projetos){
+
+            while(!y.pares.empty()) y.pares.pop();
         }
+
+        for(int i = 0; i < alunos.size(); i++) q.push(perm[i]);
+        set<pair<string, string>> aux = gale_shapley(q);
+
+        cout << aux.size() << " --- \n";
     }
 
-    for(auto[x, y] : projetos){
-
-        cout << x << " " << y.nome << " " << y.can_add << " " << y.nota_required << '\n';
-    } 
 }
