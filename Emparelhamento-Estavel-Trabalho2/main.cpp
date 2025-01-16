@@ -11,6 +11,8 @@
 
 using namespace std;
 
+// Uma struct é definida para representar cada aluno, com atributos para
+// o nome, a nota desse aluno e os projetos nos quais ele deseja participar 
 struct Aluno {
 
     int idx_projetos = 0;
@@ -18,6 +20,7 @@ struct Aluno {
     vector<string> projetos_desejados;
     string nome;
 
+    // Implementando comparadores entre alunos
     bool operator<(const Aluno& a) const {
         int x = a.projetos_desejados.size();
         int y = a.nota;
@@ -39,7 +42,8 @@ struct Aluno {
         return(projetos_desejados.size() == x && nota == y);
     }
 };
-
+// Outra struct é definida para representar cada projeto, com atributos representando o nome do projeto,
+// a nota mínima necessária para participar do projeto e a quantidade de vagas no projeto
 struct Projeto {
 
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pares;
@@ -161,6 +165,8 @@ void take_projeto(string s){
     projetos[projeto_act.nome] = projeto_act;
 }
 
+// Algoritmo de Gale Shapely, recebe como parâmetro uma fila representando os alunos e retorna
+// o emparelhamento máximo estável de alunos e projetos
 set<pair<string, string>> gale_shapley(queue<int>& q){
 
     set<pair<string, string>> ret;
@@ -168,14 +174,19 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
     while(!q.empty()){
 
         int me = q.front(); q.pop();
-
+        // Iremos olhar para o aluno atual e o primeiro projeto no qual ele ainda não tentou entrar
         Aluno &real_me = alunos[me];
         Projeto &project_now = projetos[real_me.projetos_desejados[real_me.idx_projetos]];
 
+        // Caso a nota necessária para entrar no projeto seja maior do que a do aluno, vamos colocá-lo de volta 
+        // na fila e olhar para o próximo projeto, caso ainda haja algum que ele deseja participar e não tenha tentado
         if(project_now.nota_required > real_me.nota) {
             real_me.idx_projetos++;
             if(real_me.idx_projetos < real_me.projetos_desejados.size()) q.push(me);
+            continue;
         }
+        //Caso o projeto já esteja com as vagas cheias , vamos analisar se o aluno atual é melhor do que o pior aluno
+        // do projeto , caso seja, vamos realizar essa troca de pares
         if(project_now.pares.size() == project_now.can_add) {
 
             auto bad_pairing = project_now.pares.top();
@@ -205,6 +216,8 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
                 }
             }
         } else {
+            //Caso ainda haja vagas no projeto, vamos simplesmente realizar esse pareamento e 
+            // colocar o aluno no projeto
 
             project_now.pares.push({real_me.nota, me});
             ret.insert({project_now.nome, real_me.nome});
@@ -236,6 +249,8 @@ signed main() {
 
     int ans = 0;
 
+    // Realizam-se 10 permutações diferentes de alunos para rodar o algoritmo gale shapely e analisar
+    // qual produz o melhor pareamento possível
     for(int i = 0; i < 10; i++){
         
         queue<int> q;
