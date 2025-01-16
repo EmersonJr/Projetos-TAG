@@ -23,3 +23,7 @@ Com o codígo compilado e o executável gerado, execute o programa com:
 ```shell
 ./main
 ```
+
+## O problema:
+
+O problema proposto consiste em encontrar um emparelhamento estável e máximo para a atribuição de alunos a projetos. Cada aluno recebe uma nota, calculada com base em seu histórico e tempo disponível. Além disso, os alunos apresentam uma lista com até três projetos, ordenada por ordem de preferência, aos quais têm interesse em se vincular. Para os projetos, são especificadas a nota mínima exigida e a capacidade máxima de participantes. Os responsáveis pelos projetos buscam selecionar os alunos com as maiores notas, priorizando, portanto, aqueles que apresentam melhor desempenho nas métricas definidas.
