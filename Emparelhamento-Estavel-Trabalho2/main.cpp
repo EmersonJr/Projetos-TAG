@@ -249,6 +249,7 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
             if(bad_pairing.first < real_me.nota){
 
                 ret.erase({project_now.nome, alunos[bad_pairing.second].nome});
+                cout << "Retirando o par: Projeto " << project_now.nome << " Aluno " << alunos[bad_pairing.second].nome << '\n';
                 alunos[bad_pairing.second].idx_projetos++;
                 if(alunos[bad_pairing.second].idx_projetos < alunos[bad_pairing.second].projetos_desejados.size()){
 
@@ -261,6 +262,7 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
                 project_now.pares.pop();
                 project_now.pares.push({real_me.nota, me});
                 ret.insert({project_now.nome, real_me.nome});
+                cout << "Inserindo o par : Projeto" << project_now.nome << " " << " Aluno " << real_me.nome << '\n';
             } else {
                 real_me.idx_projetos++;
                 if(real_me.idx_projetos < real_me.projetos_desejados.size()){
@@ -277,6 +279,7 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
 
             project_now.pares.push({real_me.nota, me});
             ret.insert({project_now.nome, real_me.nome});
+            cout << "Inserindo o par : Projeto" << project_now.nome << " " << " Aluno " << real_me.nome << '\n';
         }
     } 
 
@@ -304,13 +307,13 @@ signed main() {
     for(int i = 0; i < alunos.size(); i++) perm[i] = i;
 
     int ans = 0;
-
+    set<pair<string,string>> pares;
     // Realizam-se 10 permutações diferentes de alunos para rodar o algoritmo gale shapely e analisar
     // qual produz o melhor pareamento possível
     for(int i = 0; i < 10; i++){
         
         queue<int> q;
-
+        cout << "Iteração " << i+1 << '\n';
         random_device rd;
         mt19937 g(rd());
         shuffle(perm.begin(), perm.end(), g);
@@ -322,8 +325,16 @@ signed main() {
         for(int i = 0; i < alunos.size(); i++) q.push(perm[i]);
 
         set<pair<string, string>> aux = gale_shapley(q);
-
-        cout << aux.size() << " --- \n";
+        if(aux.size() > ans) {
+            pares = aux;
+            ans = aux.size();
+        }
+        cout << aux.size() << " pares: ";
+        for(auto [proj, al] : aux) cout << proj << "-" << al << " ";
+        cout << '\n';
     }
 
+    cout << "MAIOR PAREAMENTO ENCONTRADO\n";
+    cout << "Tamanho : " << ans << "\n";
+    for(auto [proj, al] : pares) cout << proj << " " << al << '\n';
 }
