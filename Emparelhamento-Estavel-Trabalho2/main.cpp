@@ -11,6 +11,9 @@
 
 using namespace std;
 
+// para solucionar o problema uma implementação do algoritmo de Gale Shapley
+// foi elaborada com as devidas variações para comportar a dinamica das notas
+
 struct Aluno {
 
     int idx_projetos = 0;
@@ -18,6 +21,10 @@ struct Aluno {
     vector<string> projetos_desejados;
     string nome;
 
+    // descrição de alguns operadores para esse struct
+    // tornando possível realizar um sort em vetores com esse
+    // tipo de elementos
+    
     bool operator<(const Aluno& a) const {
         int x = a.projetos_desejados.size();
         int y = a.nota;
@@ -54,14 +61,21 @@ map<string, Projeto> projetos;
 
 void take_aluno(string s){
 
+    // todas as linhas de entrada dos alunos seguem o seguinte padrão pré determinado:
+    // (id do aluno):(projetos que está interessado) (nota do aluno)
+    // com isso, para obter um melhor tratamento para essa entrada a dupla optou por implementar uma função
+    // que irá realizar a separação adequada para a criação correta do objeto Aluno
+
     stringstream taking(s);
 
     Aluno aluno_act;
 
     string mid;
 
-    getline(taking, mid, '(');
+    // abaixo a informação entre os primeiros parenteses é retirada
+    // essa informação é o id do aluno
 
+    getline(taking, mid, '(');
     getline(taking, mid, ')');
 
     aluno_act.nome = mid;
@@ -70,6 +84,9 @@ void take_aluno(string s){
     getline(taking, mid, '(');
 
     getline(taking, mid, ')');
+
+    // a informação dos projetos é retirada e colocada em uma nova stream de bits
+    // para realizar a retirada dos projetos em ordem de preferencia
 
     string aux = mid;
 
@@ -80,14 +97,20 @@ void take_aluno(string s){
     getline(taking, mid, '(');
     getline(taking, mid, ')');
 
+    // como a nota pode apresentar apenas 3 valores que podem ser representados
+    // por apenas um digito é valido realizar essa conversão diretamente sem
+    // auxilio do conversor
+
     aluno_act.nota = mid[0] - '0';
     int notas_menores = 0;
     while(getline(taking1, mid1, ' ')) {
 
+        // pega as strings entre os espaços
+
         string projeto = "";
         for(int i = 0; i < mid1.size(); i++){
 
-            if(mid1[i] == ',') continue;
+            if(mid1[i] == ',') continue; // ignora-se a virgula possivelmente presente no residuo sem espaço
 
             projeto.push_back(mid1[i]);
         }
@@ -95,15 +118,20 @@ void take_aluno(string s){
         aluno_act.projetos_desejados.push_back(projeto);
         if(projetos[projeto].nota_required <= aluno_act.nota){
             notas_menores++;
+            // marcamos para cada aluno se ele pode ter pelo menos um projeto para propor
         }
     }
 
-    if(notas_menores < aluno_act.projetos_desejados.size()) alunos.push_back(aluno_act);
+    if(notas_menores) alunos.push_back(aluno_act); 
+    // se ele não tiver nenhum projeto para propor nem consideramos ele na solução
+    // para fins de otimização
 }
 
-int parse_int(string s){
+int convert_int(string s){
 
     int aux = 0, pot_10 = 1;
+
+    // converte um inteiro representado por uma string para um int
 
     for(int i = s.size()-1; i > -1; i--){
 
@@ -114,12 +142,19 @@ int parse_int(string s){
 }
 void take_projeto(string s){
 
+    // para receber os dados de um determinado projeto o grupo adotou a mesma estrategia para a
+    // extração dos dados de um aluno, então o padrão especificado é:
+    // (id do projeto, capacidade, nota)
+
     stringstream taking(s);
 
     string mid;
 
     getline(taking, mid, '(');
     getline(taking, mid, ')');
+
+    // extraimos a informação que está entre os parenteses e colocamos em uma nova stringstream
+    // para extrair os valores adequados para o objeto Projeto
 
     stringstream taking1(mid);
 
@@ -129,18 +164,27 @@ void take_projeto(string s){
 
     int idx = 0;
 
+    // optamos pelo auxilio de uma variavel idx para conseguirmos definir em qual parte
+    // da sequencia especificada estamos
+
     while(getline(taking1, mid1, ' ')){
 
         string act = "";
+
+        // extraindo as informações entre os espaços
 
         for(int i = 0; i < mid1.size(); i++){
 
             if(mid1[i] == ',') continue;
 
+            // também ignorando os parenteses que possam estar presentes nessa parcela da string
+
             act.push_back(mid1[i]);
         }
 
         if(!idx){
+
+            // caso idx seja zero no formato especificado temos o id do projeto
 
             projeto_act.nome = act;
             idx++;
@@ -149,10 +193,17 @@ void take_projeto(string s){
 
         if(idx == 1){
 
-            projeto_act.can_add = parse_int(act);
+            // em idx igual a 1 pelo formato temos a capacidade desse projeto
+            // para esse caso optamos por dar suporte para a inserção de uma capacidadae
+            // com mais de 2 digitos, portanto usamos o conversor para gerar isso
+
+            projeto_act.can_add = convert_int(act);
             idx++;
             continue;
         }
+
+        // por fim, temos a nota que deve seguir o mesmo padrão dos alunos
+        // e portanto é representado por apenas um digito
 
         idx++;
         projeto_act.nota_required = act[0] - '0';
@@ -175,6 +226,8 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
         if(project_now.nota_required > real_me.nota) {
             real_me.idx_projetos++;
             if(real_me.idx_projetos < real_me.projetos_desejados.size()) q.push(me);
+            else real_me.idx_projetos = 0;
+            continue;
         }
         if(project_now.pares.size() == project_now.can_add) {
 
@@ -236,7 +289,7 @@ signed main() {
 
     int ans = 0;
 
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 10000; i++){
         
         queue<int> q;
 
@@ -249,6 +302,7 @@ signed main() {
         }
 
         for(int i = 0; i < alunos.size(); i++) q.push(perm[i]);
+
         set<pair<string, string>> aux = gale_shapley(q);
 
         cout << aux.size() << " --- \n";
