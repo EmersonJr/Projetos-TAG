@@ -40,6 +40,7 @@ O algoritmo funciona da seguinte maneira:
 		- se há vagas no projeto, realiza-se o emparelhamento do projeto com aluno
 		- se todas as vagas estão ocupadas, verifica-se se o aluno possui nota maior do que algum dos alunos que está no projeto, nesse caso, o aluno entra na vaga
 e o outro aluno é retirado do projeto (possivelmente é colocado novamente na fila se ainda há projetos para analisar na sua lista)
+
 Os responsáveis pelo projeto optaram por realizar uma otimização, a qual consiste em não adicionar um aluno a fila de alunos caso ele não possua nota o suficiente para entrar em nenhum dos projetos em sua lista, visto que não seria aceito em nenhum projeto , mesmo se houvesse vaga.
 Segundo os requisitos do trabalho, o algoritmo é rodado 10 vezes , buscando atingir o melhor emparelhamento possível, alterando a ordem em que os alunos são colocados na fila em cada iteração.
 A resposta final é obtida considerando o maior emparelhamento encontrado durante as 10 iterações .
