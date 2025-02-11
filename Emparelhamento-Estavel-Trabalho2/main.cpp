@@ -262,7 +262,7 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
                 project_now.pares.pop();
                 project_now.pares.push({real_me.nota, me});
                 ret.insert({project_now.nome, real_me.nome});
-                cout << "Inserindo o par : Projeto" << project_now.nome << " " << " Aluno " << real_me.nome << '\n';
+                cout << "Inserindo o par : Projeto " << project_now.nome << " " << " Aluno " << real_me.nome << '\n';
             } else {
                 real_me.idx_projetos++;
                 if(real_me.idx_projetos < real_me.projetos_desejados.size()){
@@ -279,7 +279,7 @@ set<pair<string, string>> gale_shapley(queue<int>& q){
 
             project_now.pares.push({real_me.nota, me});
             ret.insert({project_now.nome, real_me.nome});
-            cout << "Inserindo o par : Projeto" << project_now.nome << " " << " Aluno " << real_me.nome << '\n';
+            cout << "Inserindo o par : Projeto " << project_now.nome << " " << " Aluno " << real_me.nome << '\n';
         }
     } 
 
