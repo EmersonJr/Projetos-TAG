@@ -120,19 +120,15 @@ class Graph:
                     self.nodes[i].vizinhos.append(j)
                     self.nodes[j].vizinhos.append(i)
                     self.graph.add_edge(i, j)
-            
-            new_ordered_nodes = list()
 
-            self.ordered_nodes.sort(key=lambda x: len(self.nodes[x].vizinhos), reverse=True)
+        self.ordered_nodes.sort(key=lambda x: len(self.nodes[x].vizinhos), reverse=True)
 
-            for i in range(0, 14):
-                new_ordered_nodes.append(i)
-            
-            for id in self.ordered_nodes:
-                if id > 13:
-                    new_ordered_nodes.append(id)
-            
-            self.ordered_nodes = new_ordered_nodes
+        
+        new_ordered_nodes = [_ for _ in range(0, 14)] 
+        
+        new_ordered_nodes = new_ordered_nodes + [id for id in self.ordered_nodes if id > 13]
+
+        self.ordered_nodes = new_ordered_nodes
     
     def draw_graph(self):
         total_colors = [
@@ -148,8 +144,9 @@ class Graph:
             "violet",
             "lightblue",
             "cyan",
-            "magenta",
-            "white"
+            "olive",
+            "teal",
+            "white",
         ]
 
         colors = [total_colors[match.color] for match in self.nodes]
