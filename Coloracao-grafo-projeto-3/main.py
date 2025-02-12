@@ -134,6 +134,31 @@ class Graph:
             
             self.ordered_nodes = new_ordered_nodes
     
+    def draw_graph(self):
+        total_colors = [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "purple",
+            "orange",
+            "pink",
+            "brown",
+            "gray",
+            "violet",
+            "lightblue",
+            "cyan",
+            "magenta",
+            "white"
+        ]
+
+        colors = [total_colors[match.color] for match in self.nodes]
+
+        pos = nx.spring_layout(self.graph, k=1)
+        nx.draw(self.graph, pos, with_labels=True, node_color=colors[0:], edge_color = "black", node_size = 200, font_size = 12)
+        plt.show()
+        
+    
     def find_matches(self, idx=0):
         if idx == len(self.ordered_nodes):
             return True
@@ -158,9 +183,11 @@ if __name__ == "__main__":
 
     gph = Graph()
 
-    for cara in gph.nodes:
-        print(len(cara.vizinhos))
+    gph.draw_graph()
+
     gph.find_matches()
     for i in range(0, len(gph.nodes)):
         print(gph.nodes[i].mandante + " " + gph.nodes[i].visitante, end=" - > ")
         print(gph.nodes[i].color+1)
+    
+    gph.draw_graph()
