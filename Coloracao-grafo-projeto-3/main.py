@@ -21,6 +21,23 @@ class Graph:
         self.graph = nx.Graph()
         self.nodes = list()
         self.ordered_nodes = list()
+        self.total_colors = [
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "purple",
+            "orange",
+            "pink",
+            "brown",
+            "gray",
+            "violet",
+            "lightblue",
+            "cyan",
+            "olive",
+            "teal",
+            "white",
+        ]
         self.build_graph()
     
     def build_graph(self):
@@ -123,7 +140,6 @@ class Graph:
 
         self.ordered_nodes.sort(key=lambda x: len(self.nodes[x].vizinhos), reverse=True)
 
-        
         new_ordered_nodes = [_ for _ in range(0, 14)] 
         
         new_ordered_nodes = new_ordered_nodes + [id for id in self.ordered_nodes if id > 13]
@@ -131,27 +147,13 @@ class Graph:
         self.ordered_nodes = new_ordered_nodes
     
     def draw_graph(self):
-        total_colors = [
-            "red",
-            "blue",
-            "green",
-            "yellow",
-            "purple",
-            "orange",
-            "pink",
-            "brown",
-            "gray",
-            "violet",
-            "lightblue",
-            "cyan",
-            "olive",
-            "teal",
-            "white",
-        ]
+        
+        colors = [self.total_colors[match.color] for match in self.nodes]
 
-        colors = [total_colors[match.color] for match in self.nodes]
+        for i in range(0, 14):
+            colors[i] = "gold"
 
-        pos = nx.spring_layout(self.graph, k=1)
+        pos = nx.circular_layout(self.graph)
         nx.draw(self.graph, pos, with_labels=True, node_color=colors[0:], edge_color = "black", node_size = 200, font_size = 12)
         plt.show()
         
@@ -183,8 +185,32 @@ if __name__ == "__main__":
     gph.draw_graph()
 
     gph.find_matches()
-    for i in range(0, len(gph.nodes)):
-        print(gph.nodes[i].mandante + " " + gph.nodes[i].visitante, end=" - > ")
-        print(gph.nodes[i].color+1)
+
+    rodadas = [list() for _ in range(0, 15)]
+
+    for i in range(14, len(gph.nodes)):
+
+        rodadas[gph.nodes[i].color+1].append(
+            list([gph.nodes[i].mandante, gph.nodes[i].visitante])
+        )
     
+    for rodada in range(1, len(rodadas)):
+        print("Rodada ", end="")
+        print(rodada, end=" -------------->\n")
+
+        for partida in rodadas[rodada]:
+
+            print(partida[0] + " vs " + partida[1])
+    
+    print()
+
+    print("Legenda --------------")
+
+    for i in range(0, 14):
+        print("Rodada ", end="")
+        print(i+1, end=": ---> ")
+        print(
+            gph.total_colors[gph.nodes[i].color]
+        )
+
     gph.draw_graph()
