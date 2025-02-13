@@ -2,9 +2,16 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 class Node:
+    """
+    Classe que representa um nó no grafo, armazenando informações de uma partida.
 
-    # Definição de uma classe nó para armazenar
-    # todas as informações comuns a uma partida
+    Atributos:
+        id (int): Identificador único do nó.
+        mandante (str): Time mandante da partida.
+        visitante (str): Time visitante da partida.
+        vizinhos (list): Lista de nós vizinhos.
+        color (int): Cor atribuída ao nó (inicialmente -1, indicando não colorido).
+    """
 
     def __init__(self, _mandante, _visitante, _id):
 
@@ -15,8 +22,20 @@ class Node:
         self.color = -1
 
 class Graph:
-
+    """
+    Classe que representa um grafo de partidas de futebol e realiza sua coloração.
+    
+    Atributos:
+        graph (nx.Graph): Objeto de grafo do NetworkX.
+        nodes (list): Lista de nós do grafo.
+        ordered_nodes (list): Lista de nós ordenados por grau (número de vizinhos).
+        total_colors (list): Lista de cores disponíveis para coloração do grafo.
+    """
+    
     def __init__(self):
+        """
+        Inicializa o grafo e constrói sua estrutura.
+        """
 
         self.graph = nx.Graph()
         self.nodes = list()
@@ -41,6 +60,15 @@ class Graph:
         self.build_graph()
     
     def build_graph(self):
+        """
+        Constrói o grafo inicial, que representa partidas entre times,
+        garantindo restrições específicas sobre confrontos diretos e rodadas.
+
+        - Primeiramente, cria 14 nós iniciais representando as rodadas.
+        - Conecta todos os nós entre si para representar a possibilidade de jogos.
+        - Em seguida, adiciona nós representando partidas entre times.
+        - Aplica restrições específicas para impedir confrontos proibidos.
+        """
 
         for i in range(0, 14):
             self.nodes.append(Node("-1", "-1", i))
@@ -63,6 +91,8 @@ class Graph:
 
             self.ordered_nodes.append(i)
 
+            # Impedindo jogos específicos em certas rodadas:
+            
             if self.nodes[i].mandante == "DFC" and self.nodes[i].visitante == "CFC":
                 self.nodes[i].vizinhos.append(0)
                 self.nodes[i].vizinhos.append(13)
@@ -105,6 +135,8 @@ class Graph:
             
             for j in range(i+1, len(self.nodes)):
                 
+                # Impedindo conexões entre nós que compartilham um time na mesma rodada:
+                
                 if self.nodes[i].mandante == self.nodes[j].mandante:
                     self.nodes[i].vizinhos.append(j)
                     self.nodes[j].vizinhos.append(i)
@@ -128,6 +160,9 @@ class Graph:
                     self.nodes[j].vizinhos.append(i)
                     self.graph.add_edge(i, j)
                     continue
+                
+                # Impedindo partidas onde ambos os times específicados são mandantes em qualquer rodada:
+                
                 if self.nodes[i].mandante == "TFC" and self.nodes[j].mandante == "OFC":
                     self.nodes[i].vizinhos.append(j)
                     self.nodes[j].vizinhos.append(i)
@@ -147,6 +182,9 @@ class Graph:
         self.ordered_nodes = new_ordered_nodes
     
     def draw_graph(self):
+        """
+        Desenha o grafo utilizando a biblioteca NetworkX e Matplotlib.
+        """
         
         colors = [self.total_colors[match.color] for match in self.nodes]
 
@@ -159,6 +197,16 @@ class Graph:
         
     
     def find_matches(self, idx=0):
+        """
+        Realiza a coloração do grafo utilizando backtracking.
+        
+        Parâmetros:
+            idx (int): Índice do nó sendo processado.
+        
+        Retorna:
+            bool: True se for possível colorir o grafo, False caso contrário.
+        """
+        
         if idx == len(self.ordered_nodes):
             return True
         cant = 0
@@ -179,7 +227,7 @@ class Graph:
         return False
 
 if __name__ == "__main__":
-
+    
     gph = Graph()
 
     gph.draw_graph()
