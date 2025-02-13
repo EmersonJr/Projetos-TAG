@@ -74,7 +74,7 @@ Para realizar os gráficos para a visualização dos grafos duas bibliotecas do 
 
 ## Grafo antes de colorir
 
-<img alt="tabela" src="./grafo_pre_coloracao.png" />
+<img alt="tabela" src="./Grafo_pre_coloracao.png" />
 
 Os vértices com cor dourada são os vértices que representam as rodadas.
 
