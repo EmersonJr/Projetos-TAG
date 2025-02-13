@@ -173,6 +173,8 @@ class Graph:
                     self.nodes[j].vizinhos.append(i)
                     self.graph.add_edge(i, j)
 
+        # ordenando os vertices pelo clique das rodadas e grau 
+        
         self.ordered_nodes.sort(key=lambda x: len(self.nodes[x].vizinhos), reverse=True)
 
         new_ordered_nodes = [_ for _ in range(0, 14)] 
