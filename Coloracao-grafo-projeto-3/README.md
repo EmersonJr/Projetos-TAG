@@ -50,7 +50,7 @@ A tabela a seguir apresenta os times participantes do campeonato, bem como as re
 
 # A solução:
 
-Para solucionar o problema proposto um grafo em que cada vértice é um jogo ou rodada foi modelado. Cada aresta indica uma partida que não pode acontecer na mesma rodada que alguma outra ou uma rodada que não pode acontecer ao mesmo tempo que uma partida. Como resultado disso arestas entre todos os vértices que representam rodadas irão existir, bem como arestas entre partidas que tem times em comum e arestas entre as restrições da tabela.
+Para solucionar o problema proposto um grafo em que cada vértice é um jogo ou rodada foi modelado. Cada aresta indica que os vértices conectados não podem ocorrer ao mesmo tempo. Como resultado disso todos os vértices que representam rodadas apresentam arestas entre si, formando um clique, bem como arestas entre partidas que tem times em comum e arestas entre as restrições presentes na tabela.
 
 De posse do grafo modelado, um algoritmo guloso para encontrar a coloração pode ser descrito da seguinte forma em pseudocódigo, sendo L uma lista com a ordem dos vértices a serem testados:
 
@@ -64,13 +64,13 @@ De posse do grafo modelado, um algoritmo guloso para encontrar a coloração pod
       -  Se ela retornou True, retorne True, a coloração já foi encontrada
       -  Desmarque essa cor no vértice L[idx]
 
-Com o algoritmo definido, é necessário definir uma ordem ótima para executar a função. Para tal a ordem ótima encontrada foi começar pelo maior clique e ordenar os demais vertíces do maior grau para o menor.
+Com o algoritmo definido, é necessário obter uma ordem ótima de vértices para a execução da função. Sendo assim a ordem ótima encontrada é começar a testar pelo maior clique e ordenar os demais vertíces do maior grau para o menor.
 
-O maior clique presente no grafo tem que ter tamanho 14, pois se existir um clique maior uma coloração usando 14 cores não será possível, uma vez que cada vértice do clique deverá ter cores diferentes entre si, portanto é possível começar pelo clique das rodadas que devem estar conectadas entre si pelo critério estabelecido na modelagem.
+O maior clique presente no grafo tem que ter tamanho 14, pois se existir um clique maior uma coloração usando 14 cores não será possível, uma vez que cada vértice do clique deve ter cores diferentes entre si, portanto é possível começar pelo clique formado pelos vértices das rodadas que devem estar conectadas entre si seguindo o critério estabelecido na modelagem.
 
 # Resultados
 
-Para realizar os gráficos para a visualização dos grafos duas bibliotecas do python foram usadas a networkx e a matplotlib.
+Para realizar os gráficos para a visualização dos grafos duas bibliotecas do python foram usadas a networkx e a matplotlib, as cores de cada vértice são definidas seguindo uma tabela e um valor associado a esse vértice, com exceção dos vértices de $0$ a $13$, que são os vértices associados as rodadas, eles irão apresentar cor dourada no gráfico.
 
 ## Grafo antes de colorir
 
