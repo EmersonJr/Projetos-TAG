@@ -39,7 +39,7 @@ python main.py
 
 O projeto consistia em encontrar uma disposição de partidas para um campeonato com sete times definido pelo seguinte formato:
 
-- 14 partidas devem acontecer
+- $14$ partidas devem acontecer
 - Todos os times jogam duas vezes entre si, uma vez como mandante e a outra como visitante
 
 Por conta, de problemas comerciais ou de segurança algumas partidas devem acontecer obrigatoriamente em rodadas diferentes.
@@ -52,21 +52,21 @@ A tabela a seguir apresenta os times participantes do campeonato, bem como as re
 
 Para solucionar o problema proposto um grafo em que cada vértice é um jogo ou rodada foi modelado. Cada aresta indica que os vértices conectados não podem ocorrer ao mesmo tempo. Como resultado disso todos os vértices que representam rodadas apresentam arestas entre si, formando um clique, bem como arestas entre partidas que tem times em comum e arestas entre as restrições presentes na tabela.
 
-De posse do grafo modelado, um algoritmo guloso para encontrar a coloração pode ser descrito da seguinte forma em pseudocódigo, sendo L uma lista com a ordem dos vértices a serem testados:
+De posse do grafo modelado, um algoritmo guloso para encontrar a coloração pode ser descrito da seguinte forma em pseudocódigo, sendo $L$ uma lista com a ordem dos vértices a serem testados:
 
-- def encontra_coloracao(idx):
-  - Se esse for o primeiro índice fora da lista, retorne True, a coloração foi encontrada 
-  - Para cada vizinho de de L[idx}, se ele tem uma cor marcada marque essa cor como indisponível
-  - Se nenhuma cor está disponível, retorne False
-  - Para cada cor do menor id para o maior id:
-    - Se essa cor tiver disponível marque essa cor no vértice L[idx]
-      - Chame a função encontra_coloracao com idx+1
-      -  Se ela retornou True, retorne True, a coloração já foi encontrada
-      -  Desmarque essa cor no vértice L[idx]
+- def encontra_coloracao($idx$):
+  - Se $idx$ for o primeiro índice fora da lista, retorne $True$, a coloração foi encontrada 
+  - Para cada vizinho de de $L_{idx}$, se ele tem uma cor marcada marque essa cor como indisponível
+  - Se nenhuma cor está disponível, retorne $False$
+  - Para cada cor do menor $id$ para o maior $id$:
+    - Se essa cor tiver disponível marque essa cor no vértice $L_{idx}$
+      - Chame a função encontra_coloracao com $idx+1$
+      -  Se ela retornou $True$, retorne $True$, a coloração já foi encontrada
+      -  Desmarque essa cor no vértice $L_idx$
 
 Com o algoritmo definido, é necessário obter uma ordem ótima de vértices para a execução da função. Sendo assim a ordem ótima encontrada é começar a testar pelo maior clique e ordenar os demais vertíces do maior grau para o menor.
 
-O maior clique presente no grafo tem que ter tamanho 14, pois se existir um clique maior uma coloração usando 14 cores não será possível, uma vez que cada vértice do clique deve ter cores diferentes entre si, portanto é possível começar pelo clique formado pelos vértices das rodadas que devem estar conectadas entre si seguindo o critério estabelecido na modelagem.
+O maior clique presente no grafo tem que ter tamanho $14$, pois se existir um clique maior uma coloração usando $14$ cores não será possível, uma vez que cada vértice do clique deve ter cores diferentes entre si, portanto é possível começar pelo clique formado pelos vértices das rodadas que devem estar conectadas entre si seguindo o critério estabelecido na modelagem.
 
 # Resultados
 
