@@ -70,7 +70,7 @@ O maior clique presente no grafo tem que ter tamanho 14, pois se existir um cliq
 
 # Resultados
 
-Para realizar os gráficos para a visualização dos grafos duas bibliotecas do python foram usadas a networkx e a matplotlib, as cores de cada vértice são definidas seguindo uma tabela e um valor associado a esse vértice, com exceção dos vértices de $0$ a $13$, que são os vértices associados as rodadas, eles irão apresentar cor dourada no gráfico.
+Para realizar o desenho dos gráficos para a visualização dos grafos, duas bibliotecas do python foram usadas a networkx e a matplotlib, as cores de cada vértice são definidas seguindo uma tabela e o número da rodada associada a esse vértice, com exceção dos vértices de $0$ a $13$, que são os vértices associados as rodadas, eles irão apresentar cor dourada no gráfico.
 
 ## Grafo antes de colorir
 
