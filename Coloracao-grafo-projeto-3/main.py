@@ -190,9 +190,6 @@ class Graph:
         
         colors = [self.total_colors[match.color] for match in self.nodes]
 
-        for i in range(0, 14):
-            colors[i] = "gold"
-
         pos = nx.circular_layout(self.graph)
         nx.draw(self.graph, pos, with_labels=True, node_color=colors[0:], edge_color = "black", node_size = 200, font_size = 12)
         plt.show()
