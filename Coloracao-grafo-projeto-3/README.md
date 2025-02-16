@@ -50,7 +50,7 @@ A tabela a seguir apresenta os times participantes do campeonato, bem como as re
 
 # A solução:
 
-Para solucionar o problema proposto um grafo em que cada vértice é um jogo ou rodada foi modelado. Cada aresta indica que os vértices conectados não podem ocorrer ao mesmo tempo. Como resultado disso todos os vértices que representam rodadas apresentam arestas entre si, formando um clique, bem como arestas entre partidas que tem times em comum e arestas entre as restrições presentes na tabela.
+Para solucionar o problema proposto um grafo em que cada vértice é um jogo ou rodada foi modelado e o problema remodelado para "Encontre uma 14-coloração apropriada para esse grafo". Cada aresta indica que os vértices conectados não podem ocorrer ao mesmo tempo. Como resultado disso todos os vértices que representam rodadas apresentam arestas entre si, formando um clique, bem como arestas entre partidas que tem times em comum e arestas entre as restrições presentes na tabela.
 
 De posse do grafo modelado, um algoritmo guloso para encontrar a coloração pode ser descrito da seguinte forma em pseudocódigo, sendo $L$ uma lista com a ordem dos vértices a serem testados:
 
